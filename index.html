@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Name — Portfolio</title>
+  <title>Mindy Liu — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
       --ink-3: #8a8a84;
       --paper: #f5f3ee;
       --paper-2: #ede9e0;
-      --accent: #c8502a;
+      --accent: #f00078;
       --accent-2: #e8d5c4;
       --green: #3a6b4a;
       --blue: #2a4a7a;
@@ -227,9 +227,9 @@
       border-radius: 100px;
     }
 
-    .status-progress { background: #fef3e2; color: var(--amber); }
+    .status-progress { background: #e8f0fc; color: var(--blue); }
     .status-iterating { background: #e8f0fc; color: var(--blue); }
-    .status-live { background: #e6f4ec; color: var(--green); }
+    .status-live { background: #e8f0fc; color: var(--blue); }
 
     .project-desc {
       font-size: 0.875rem;
@@ -250,6 +250,16 @@
       letter-spacing: 0.04em;
       color: var(--ink-3);
       background: var(--paper-2);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tool-pill {
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+      color: var(--ink-2);
+      background: transparent;
+      border: 1px solid var(--paper-2);
       padding: 3px 8px;
       border-radius: 4px;
     }
@@ -407,7 +417,7 @@
 
   <!-- NAV -->
   <nav>
-    <a href="#" class="nav-name">Your Name</a>
+    <a href="#" class="nav-name">Mindy Liu</a>
     <ul class="nav-links">
       <li><a href="#projects">Projects</a></li>
       <li><a href="#about">About</a></li>
@@ -417,16 +427,16 @@
 
   <!-- HERO -->
   <div class="hero">
-    <p class="hero-eyebrow">Aspiring product manager &amp; builder</p>
-    <h1 class="hero-heading">I build things and <em>learn in public.</em></h1>
+    <p class="hero-eyebrow">Mechatronic Engineering Student in Product &amp; Design</p>
+    <h1 class="hero-heading">Hi, I'm Mindy. <br>Watch me build!</h1>
     <p class="hero-bio">
-      I'm developing an end-to-end understanding of product — from discovery and design to shipping and iteration. These projects document the process, not just the outcome.
+      I'm developing an end-to-end understanding of product with a background in mechatronic engineering and AI systems. This site documents the process, come along... 
     </p>
     <div class="hero-tags">
       <span class="tag">Product thinking</span>
       <span class="tag">Full-stack dev</span>
       <span class="tag">Systems design</span>
-      <span class="tag">Open to roles</span>
+      <span class="tag">Mechatronic engineering</span>
     </div>
   </div>
 
@@ -445,16 +455,24 @@
       <div class="project-card animate" style="animation-delay:0.1s">
         <div class="project-card-left">
           <div class="project-top">
-            <span class="project-title">My app — end to end</span>
+            <span class="project-title">Chewy — end to end product</span>
             <span class="status status-progress">In progress</span>
           </div>
           <p class="project-desc">
-            Building a [type] app from scratch. Documenting the full dev process — discovery, architecture decisions, build, and launch. This is the main project I'm using to develop an end-to-end understanding of product.
+            Most nutrition apps fail the consistency test — too many taps, too much friction for something you're supposed to do every day. Chewy is a rethink inspired by the UX simplicity of Hevy: a chat-first calorie tracker where you describe your meal in plain language and it logs it instantly. The same interface doubles as a recipe builder, with a profile view for daily intake and goal history. Built end-to-end solo to develop real product thinking across design, dev, and UX.
           </p>
           <div class="project-meta">
             <span class="meta-pill">Product</span>
+            <span class="meta-pill">UX/UI</span>
             <span class="meta-pill">Engineering</span>
             <span class="meta-pill">Solo</span>
+          </div>
+          <div class="project-meta" style="margin-top:6px">
+            <span class="tool-pill">React Native</span>
+            <span class="tool-pill">TypeScript</span>
+            <span class="tool-pill">JavaScript</span>
+            <span class="tool-pill">Node</span>
+            <span class="tool-pill">Supabase</span>
           </div>
         </div>
         <div class="project-links">
@@ -468,19 +486,30 @@
       <div class="project-card animate" style="animation-delay:0.2s">
         <div class="project-card-left">
           <div class="project-top">
-            <span class="project-title">Project two</span>
-            <span class="status status-iterating">Iterating</span>
+            <span class="project-title">RoboCup Rescue — project leadership</span>
+            <span class="status status-iterating">On going</span>
           </div>
           <p class="project-desc">
-            A project you've half-finished and are continuing to develop. Show what you've learned and what you'd change — the iteration process is the story.
+            Student Team Lead for UNSW's RoboCup Rescue program — a multidisciplinary team of 15 developers and researchers building autonomous search and rescue robots for global competition. I plan, prioritise features, delegate tasks, and manage timelines. On the technical side, I work directly on robot navigation, control software, exploration mapping, and computer vision through programming and applied AI research.
           </p>
           <div class="project-meta">
-            <span class="meta-pill">Product</span>
-            <span class="meta-pill">Design</span>
+            <span class="meta-pill">Team lead</span>
+            <span class="meta-pill">AI research</span>
+            <span class="meta-pill">Robotics</span>
+            <span class="meta-pill">Computer Vision</span>
+            <span class="meta-pill">Machine Learning</span>
+          </div>
+          <div class="project-meta" style="margin-top:6px">
+            <span class="tool-pill">ROS2</span>
+            <span class="tool-pill">SLAM</span>
+            <span class="tool-pill">YOLO</span>
+            <span class="tool-pill">C++</span>
+            <span class="tool-pill">Python</span>
           </div>
         </div>
         <div class="project-links">
-          <a href="#" class="project-link">Case study</a>
+          <a href="https://www.unsw.edu.au/challeng/vertically-integrated-projects/explore-vertically-integrated-projects/ai-4-everyone" target="_blank" class="project-link">UNSW VIP - AI 4 Everyone</a>
+          <a href="https://www.robocup.org/" target="_blank" class="project-link">RoboCup Comp</a>
         </div>
       </div>
 
@@ -488,20 +517,21 @@
       <div class="project-card animate" style="animation-delay:0.3s">
         <div class="project-card-left">
           <div class="project-top">
-            <span class="project-title">Project three</span>
+            <span class="project-title">Selective writing course — design & business</span>
             <span class="status status-live">Live</span>
           </div>
           <p class="project-desc">
-            A completed project. Outcomes, metrics, and learnings from shipping something real.
+            Built and launched a Selective & Scholarship writing tutoring course from scratch — curriculum, lesson design, branding, and business operations. Designed a Figma prototype landing page to communicate product value to parents and students, using intentional page flow and information hierarchy to mirror the structured learning journey the course offers. Delivered to a live cohort with strong student outcomes, while managing end-to-end operations: workflows, scheduling, KPIs, and marketing. Real testimonials on my live website.
           </p>
           <div class="project-meta">
-            <span class="meta-pill">Research</span>
-            <span class="meta-pill">Strategy</span>
+            <span class="meta-pill">UX / UI</span>
+            <span class="meta-pill">Founder</span>
+            <span class="meta-pill">Product design</span>
           </div>
         </div>
         <div class="project-links">
-          <a href="#" class="project-link">Case study</a>
-          <a href="#" class="project-link">Live site</a>
+          <!-- <a href="#" class="project-link">Case study</a> -->
+          <a href="https://mincluelanding.vercel.app/" target="_blank" class="project-link">Live site</a>
         </div>
       </div>
 
@@ -518,11 +548,11 @@
     <div class="about-grid">
       <div class="about-cell">
         <p class="about-cell-label">Background</p>
-        <p class="about-cell-value">Where you're coming from — previous roles, studies, or experience.</p>
+        <p class="about-cell-value">Check out my LinkedIn for experience!</p>
       </div>
       <div class="about-cell">
         <p class="about-cell-label">Goal</p>
-        <p class="about-cell-value">Breaking into product management by building real things and documenting the process.</p>
+        <p class="about-cell-value">Breaking into product management with a mechatronics background by building real things and documenting the process.</p>
       </div>
       <div class="about-cell">
         <p class="about-cell-label">Skills</p>
@@ -530,7 +560,7 @@
       </div>
       <div class="about-cell">
         <p class="about-cell-label">Currently</p>
-        <p class="about-cell-value">Building my first end-to-end app. Open to PM roles.</p>
+        <p class="about-cell-value">Building my first end-to-end app. Open to product, technology and engineering roles.</p>
       </div>
     </div>
   </section>
@@ -540,19 +570,19 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="contact-row">
-      <h2 class="contact-heading">Let's <em>talk.</em></h2>
+      <h2 class="contact-heading">Reach out!</h2>
       <div class="contact-links">
-        <a href="mailto:you@email.com" class="contact-btn primary">Get in touch</a>
-        <a href="https://linkedin.com/in/yourhandle" target="_blank" class="contact-btn secondary">LinkedIn</a>
-        <a href="https://github.com/yourusername" target="_blank" class="contact-btn secondary">GitHub</a>
+        <a href="mailto:mindyyliu25@gmail.com" class="contact-btn primary">Get in touch</a>
+        <a href="https://www.linkedin.com/in/mindy-liu-5916492a5/" target="_blank" class="contact-btn secondary">LinkedIn</a>
+        <a href="https://github.com/mindyy12" target="_blank" class="contact-btn secondary">GitHub</a>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <span>Your Name</span>
-    <span>Updated 2026</span>
+    <span>Mindy Liu</span>
+    <span>Updated April 2026</span>
   </footer>
 
   <script>
