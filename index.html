@@ -204,7 +204,7 @@
         <!-- Gallery column -->
         <div class="gallery-col">
           <div class="gallery-viewer" id="gv-chewy">
-            <img id="chewy-img" src="media/IMG_2400.PNG" alt="Chewy screenshot" onclick="openLightbox('img', chewyMedia[chewyIdx].src)">
+            <img id="chewy-img" src="media/chewy_chat_tab.jpg" alt="Chewy screenshot" onclick="openLightbox('img', chewyMedia[chewyIdx].src)">
           </div>
           <div class="gallery-nav">
             <button class="gallery-btn" onclick="stepGallery(-1)">‹</button>
@@ -343,10 +343,11 @@
   <script>
     // Gallery
     const chewyMedia = [
-      { src: 'media/IMG_2400.PNG' },
-      { src: 'media/IMG_2401.PNG' },
-      { src: 'media/IMG_2402.PNG' },
-      { src: 'media/IMG_2404.PNG' },
+      { src: 'media/chewy_chat_tab.jpg' },
+      { src: 'media/recipe_card.png' },
+      { src: 'media/chewy_chat_tab.jpg' },
+      { src: 'media/chewy_recipe_tab.jpg' },
+      { src: 'media/chewy_profile_tab.jpg' },
     ];
     let chewyIdx = 0;
 
@@ -371,7 +372,7 @@
         el = document.createElement('img');
         el.src = src;
         el.alt = '';
-        if (src === 'media/IMG_2400.PNG') {
+        if (src === 'media/chewy_chat_tab.jpg') {
           inner.style.background = '#000000';
           inner.style.borderRadius = '8px';
           inner.style.padding = '0';
