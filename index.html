@@ -110,6 +110,28 @@
     .contact-btn.secondary { border: 1px solid var(--paper-2); color: var(--ink-2); }
     .contact-btn.secondary:hover { border-color: var(--ink-3); }
 
+    #custom-cursor {
+      position: fixed;
+      width: 50px;
+      height: auto;
+      pointer-events: none;
+      z-index: 99999;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    body,
+    a,
+    button,
+    .project-link,
+    .gallery-btn,
+    img,
+    video {
+      cursor: none;
+    }
+
     footer { border-top: 1px solid var(--paper-2); padding: 1.5rem 2rem; max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     footer span { font-size: 0.75rem; color: var(--ink-3); }
 
@@ -128,10 +150,11 @@
       .contact-row { flex-direction: column; align-items: flex-start; }
       footer { padding: 1.5rem 1rem; }
     }
+
   </style>
 </head>
 <body>
-
+  <img id="custom-cursor" src="media/mouse_.png" alt="">
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
     <div class="lightbox-inner" id="lightbox-inner">
@@ -416,6 +439,32 @@
       el.style.animationPlayState = 'paused';
       observer.observe(el);
     });
+
+    // Custom image cursor
+    const cursor = document.getElementById('custom-cursor');
+
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let cursorX = 0;
+    let cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateCursor() {
+      cursorX += (mouseX - cursorX) * 0.15;
+      cursorY += (mouseY - cursorY) * 0.15;
+
+      cursor.style.transform =
+        `translate(${cursorX - 12}px, ${cursorY - 5}px) rotate(-20deg)`;;
+
+      requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
   </script>
 
 </body>
