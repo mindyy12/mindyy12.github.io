@@ -25,15 +25,134 @@
     html { scroll-behavior: smooth; }
     body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-    /* NAV */
+    /* ─── DARK INTRO OVERLAY ─── */
+    #intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #050505;
+      cursor: none;
+      transition: opacity 0.85s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #intro-overlay.revealed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /*
+      Mirror the exact layout path the hero heading takes:
+        nav = 56px (sticky, above scroll)
+        .hero padding-top = 5rem = 80px
+        .hero-eyebrow font-size 0.75rem + margin-bottom 1.25rem
+        then the h1 begins
+      We use position:absolute so it sits at the top of the overlay
+      matching the page's own layout, not viewport-centered.
+    */
+    .intro-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      /* nav height + hero padding-top */
+      padding-top: calc(56px + 5rem);
+      max-width: 860px;
+      margin: 0 auto;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .intro-eyebrow-ghost {
+      /* invisible spacer — same metrics as .hero-eyebrow */
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: transparent;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+      user-select: none;
+    }
+
+    .intro-name {
+      font-family: var(--serif);
+      /* exact match to .hero-heading */
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #b8d4f8;
+      max-width: 700px;
+      text-shadow:
+        0 0 40px rgba(150, 200, 255, 0.55),
+        0 0 100px rgba(100, 160, 255, 0.3),
+        0 0 200px rgba(80, 140, 255, 0.15);
+      user-select: none;
+      animation: pulseGlow 3.5s ease-in-out infinite;
+    }
+
+    .intro-hint {
+      margin-top: 2rem;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(180, 210, 255, 0.35);
+      user-select: none;
+      animation: hintFade 2s ease-in-out 1.2s both;
+    }
+
+    /* subtle particle dots */
+    .intro-dots {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .intro-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(120, 180, 255, 0.12);
+      animation: floatDot linear infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        text-shadow:
+          0 0 40px rgba(150, 200, 255, 0.55),
+          0 0 100px rgba(100, 160, 255, 0.3),
+          0 0 200px rgba(80, 140, 255, 0.15);
+      }
+      50% {
+        text-shadow:
+          0 0 60px rgba(170, 220, 255, 0.75),
+          0 0 140px rgba(120, 180, 255, 0.45),
+          0 0 260px rgba(100, 160, 255, 0.25);
+      }
+    }
+
+    @keyframes hintFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatDot {
+      from { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      to   { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* ─── NAV ─── */
     nav { position: sticky; top: 0; z-index: 100; background: var(--paper); border-bottom: 1px solid var(--paper-2); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 56px; }
     .nav-name { font-family: var(--serif); font-size: 1.1rem; color: var(--ink); text-decoration: none; letter-spacing: -0.01em; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.8rem; font-weight: 400; color: var(--ink-2); text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase; transition: color 0.2s; }
     .nav-links a:hover { color: var(--accent); }
 
-    /* HERO */
-    .hero { max-width: 860px; margin: 0 auto; padding: 5rem 2rem 4rem; opacity: 0; animation: fadeUp 0.7s ease forwards; }
+    /* ─── HERO ─── */
+    .hero { max-width: 860px; margin: 0 auto; padding: 5rem 2rem 4rem; opacity: 0; transition: opacity 0.5s ease; }
+    .hero.animate-in { opacity: 1; }
     .hero-eyebrow { font-size: 0.75rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; }
     .hero-heading { font-family: var(--serif); font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.1; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1.5rem; max-width: 700px; }
     .hero-heading em { font-style: italic; color: var(--accent); }
@@ -42,23 +161,18 @@
     .tag { font-size: 0.72rem; font-weight: 400; letter-spacing: 0.05em; padding: 5px 12px; border: 1px solid var(--paper-2); border-radius: 100px; color: var(--ink-3); background: transparent; transition: border-color 0.2s, color 0.2s; }
     .tag:hover { border-color: var(--ink-3); color: var(--ink-2); }
 
-    /* LAYOUT */
+    /* ─── LAYOUT ─── */
     .section-divider { max-width: 860px; margin: 0 auto; padding: 0 2rem; border-top: 1px solid var(--paper-2); }
     section { max-width: 860px; margin: 0 auto; padding: 3.5rem 2rem; }
     .section-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 2rem; }
     .section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
     .section-count { font-family: var(--serif); font-size: 0.85rem; color: var(--ink-3); font-style: italic; }
 
-    /* PROJECT CARDS */
+    /* ─── PROJECT CARDS ─── */
     .projects-grid { display: flex; flex-direction: column; gap: 1px; background: var(--paper-2); border: 1px solid var(--paper-2); border-radius: 12px; overflow: hidden; }
-
-    /* Default card — no gallery */
     .project-card { background: var(--paper); padding: 1.75rem 2rem; display: grid; grid-template-columns: 1fr auto; gap: 1.25rem; align-items: start; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #f0ede6; }
-
-    /* Card with gallery column */
     .project-card.has-gallery { grid-template-columns: 1fr 28% auto; }
-
     .project-card-left { min-width: 0; }
     .project-top { display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem; flex-wrap: wrap; }
     .project-title { font-family: var(--serif); font-size: 1.2rem; letter-spacing: -0.01em; color: var(--ink); }
@@ -73,7 +187,7 @@
     .project-link:hover { color: var(--accent); }
     .project-link::after { content: '→'; font-size: 0.8em; }
 
-    /* GALLERY COLUMN */
+    /* ─── GALLERY ─── */
     .gallery-col { align-self: start; display: flex; flex-direction: column; gap: 8px; }
     .gallery-viewer { position: relative; width: 100%; aspect-ratio: 9/16; border-radius: 8px; overflow: hidden; background: var("#f0ede6"); }
     .gallery-viewer img { width: 100%; height: 100%; object-fit: contain; display: block; cursor: pointer; background: var('#f0ede6'); }
@@ -84,7 +198,7 @@
     .gallery-btn { background: none; border: 1px solid var(--paper-2); border-radius: 100px; width: 26px; height: 26px; cursor: pointer; font-size: 0.8rem; color: var(--ink-3); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
     .gallery-btn:hover { border-color: var(--ink-3); color: var(--ink); }
 
-    /* LIGHTBOX */
+    /* ─── LIGHTBOX ─── */
     .lightbox { display: none; position: fixed; inset: 0; background: rgba(26,26,24,0.94); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; }
     .lightbox.open { display: flex; }
     .lightbox-inner { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -93,13 +207,13 @@
     .lightbox-close { position: absolute; top: -40px; right: 0; background: none; border: none; color: white; font-size: 1.6rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; line-height: 1; }
     .lightbox-close:hover { opacity: 1; }
 
-    /* ABOUT */
+    /* ─── ABOUT ─── */
     .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--paper-2); border: 1px solid var(--paper-2); border-radius: 12px; overflow: hidden; }
     .about-cell { background: var(--paper); padding: 1.25rem 1.5rem; }
     .about-cell-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 0.5rem; }
     .about-cell-value { font-size: 0.875rem; font-weight: 300; color: var(--ink-2); line-height: 1.6; }
 
-    /* CONTACT */
+    /* ─── CONTACT ─── */
     .contact-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
     .contact-heading { font-family: var(--serif); font-size: 1.6rem; letter-spacing: -0.02em; color: var(--ink); }
     .contact-heading em { font-style: italic; color: var(--accent); }
@@ -110,6 +224,7 @@
     .contact-btn.secondary { border: 1px solid var(--paper-2); color: var(--ink-2); }
     .contact-btn.secondary:hover { border-color: var(--ink-3); }
 
+    /* ─── CURSOR ─── */
     #custom-cursor {
       position: fixed;
       width: 50px;
@@ -122,16 +237,9 @@
       will-change: transform;
     }
 
-    body,
-    a,
-    button,
-    .project-link,
-    .gallery-btn,
-    img,
-    video {
-      cursor: none;
-    }
+    body, a, button, .project-link, .gallery-btn, img, video { cursor: none; }
 
+    /* ─── FOOTER ─── */
     footer { border-top: 1px solid var(--paper-2); padding: 1.5rem 2rem; max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     footer span { font-size: 0.75rem; color: var(--ink-3); }
 
@@ -141,6 +249,7 @@
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
       .nav-links { gap: 1.25rem; }
+      .intro-content { padding: calc(56px + 3rem) 1rem 2.5rem; }
       .hero { padding: 3rem 1rem 2.5rem; }
       section { padding: 2.5rem 1rem; }
       .section-divider { padding: 0 1rem; }
@@ -150,11 +259,23 @@
       .contact-row { flex-direction: column; align-items: flex-start; }
       footer { padding: 1.5rem 1rem; }
     }
-
   </style>
 </head>
 <body>
+
+  <!-- ─── INTRO OVERLAY ─── -->
+  <div id="intro-overlay">
+    <canvas id="halo-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;"></canvas>
+    <div class="intro-dots" id="intro-dots"></div>
+    <div class="intro-content">
+      <p class="intro-eyebrow-ghost">Mechatronic Engineering Student in Product &amp; Design</p>
+      <div class="intro-name">Hi, I'm Mindy. <br>Watch me build!</div>
+      <p class="intro-hint">click anywhere to enter</p>
+    </div>
+  </div>
+
   <img id="custom-cursor" src="media/mouse_.png" alt="">
+
   <!-- LIGHTBOX -->
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
     <div class="lightbox-inner" id="lightbox-inner">
@@ -224,7 +345,6 @@
             <span class="tool-pill">SQL</span>
           </div>
         </div>
-        <!-- Gallery column -->
         <div class="gallery-col">
           <div class="gallery-viewer" id="gv-chewy">
             <img id="chewy-img" src="media/chewy_chat_tab.jpg" alt="Chewy screenshot" onclick="openLightbox('img', chewyMedia[chewyIdx].src)">
@@ -265,7 +385,6 @@
             <span class="tool-pill">Python</span>
           </div>
         </div>
-        <!-- Gallery column -->
         <div class="gallery-col">
           <div class="gallery-viewer" id="gv-robocup">
             <video
@@ -294,7 +413,7 @@
             <span class="status status-live">Live</span>
           </div>
           <p class="project-desc">
-            Late last year I built and launched a Selective &amp; Scholarship writing tutoring course from scratch — curriculum, lesson design, branding, and business operations. I designed a Figma prototype landing page to communicate product value to parents and students, using intentional page flow and information hierarchy to mirror the structured learning journey the course offers. Delivered to a live cohort with strong student outcomes, while managing end-to-end operations: workflows, scheduling and marketing. Real testomonies on the live website. 
+            Late last year I built and launched a Selective &amp; Scholarship writing tutoring course from scratch — curriculum, lesson design, branding, and business operations. I designed a Figma prototype landing page to communicate product value to parents and students, using intentional page flow and information hierarchy to mirror the structured learning journey the course offers. Delivered to a live cohort with strong student outcomes, while managing end-to-end operations: workflows, scheduling and marketing. Real testomonies on the live website.
           </p>
           <div class="project-meta">
             <span class="meta-pill">UX / UI</span>
@@ -330,7 +449,6 @@
       </div>
       <div class="about-cell">
         <p class="about-cell-label">Software Tools</p>
-        <!-- <p class="about-cell-value">Product strategy · UX thinking · Front-end · Systems design</p> -->
         <p class="about-cell-value">React Native · Vercel · Bolt · Supabase · Databricks · QGIS · Vivado · Fusion · SolidWorks · Webots · ROS2 · GitLab</p>
       </div>
       <div class="about-cell">
@@ -364,7 +482,41 @@
   </footer>
 
   <script>
-    // Gallery
+    /* ─── INTRO OVERLAY ─── */
+    const overlay = document.getElementById('intro-overlay');
+    const dotsContainer = document.getElementById('intro-dots');
+
+    // spawn floating dots
+    for (let i = 0; i < 18; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'intro-dot';
+      const size = Math.random() * 5 + 2;
+      dot.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        animation-duration: ${6 + Math.random() * 10}s;
+        animation-delay: ${Math.random() * 8}s;
+        opacity: 0;
+      `;
+      dotsContainer.appendChild(dot);
+    }
+
+    overlay.addEventListener('click', revealSite, { once: true });
+
+    function revealSite() {
+      overlay.classList.add('revealed');
+      // start the hero a beat after overlay begins fading so the text
+      // is already in place when the dark background lifts
+      setTimeout(() => {
+        document.querySelector('.hero').classList.add('animate-in');
+      }, 200);
+      overlay.addEventListener('transitionend', () => {
+        overlay.style.display = 'none';
+      }, { once: true });
+    }
+
+    /* ─── GALLERY ─── */
     const chewyMedia = [
       { src: 'media/chewy_home_screen (2).jpg' },
       { src: 'media/recipe_card.png' },
@@ -381,15 +533,12 @@
       img.onclick = () => openLightbox('img', chewyMedia[chewyIdx].src);
     }
 
-    // Lightbox
+    /* ─── LIGHTBOX ─── */
     function openLightbox(type, src) {
       const inner = document.getElementById('lightbox-inner');
       const prev = inner.querySelector('img, video');
       if (prev) prev.remove();
-      
-      // Reset background
       inner.style.background = '';
-      
       let el;
       if (type === 'img') {
         el = document.createElement('img');
@@ -424,9 +573,18 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeLightbox({ target: document.getElementById('lightbox') });
+      if (e.shiftKey && e.key === 'D') resetOverlay();
     });
 
-    // Scroll animations
+    function resetOverlay() {
+      haloAlpha = 1;
+      overlay.style.display = '';
+      overlay.classList.remove('revealed');
+      document.querySelector('.hero').classList.remove('animate-in');
+      overlay.addEventListener('click', revealSite, { once: true });
+    }
+
+    /* ─── SCROLL ANIMATIONS ─── */
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -440,31 +598,72 @@
       observer.observe(el);
     });
 
-    // Custom image cursor
+    /* ─── HALO CANVAS ─── */
+    const haloCanvas = document.getElementById('halo-canvas');
+    const hctx = haloCanvas.getContext('2d');
+    let haloAlpha = 1; // fades to 0 on reveal
+
+    function resizeHalo() {
+      haloCanvas.width = window.innerWidth;
+      haloCanvas.height = window.innerHeight;
+    }
+    resizeHalo();
+    window.addEventListener('resize', resizeHalo);
+
+    function drawHalo(x, y) {
+      hctx.clearRect(0, 0, haloCanvas.width, haloCanvas.height);
+      if (haloAlpha <= 0) return;
+
+      // outer soft glow
+      const outer = hctx.createRadialGradient(x, y, 0, x, y, 180);
+      outer.addColorStop(0,   `rgba(100, 180, 255, ${0.13 * haloAlpha})`);
+      outer.addColorStop(0.4, `rgba(80,  160, 255, ${0.07 * haloAlpha})`);
+      outer.addColorStop(1,   `rgba(60,  140, 255, 0)`);
+      hctx.fillStyle = outer;
+      hctx.beginPath();
+      hctx.arc(x, y, 180, 0, Math.PI * 2);
+      hctx.fill();
+
+      // inner brighter core
+      const inner = hctx.createRadialGradient(x, y, 0, x, y, 60);
+      inner.addColorStop(0,   `rgba(160, 210, 255, ${0.22 * haloAlpha})`);
+      inner.addColorStop(0.5, `rgba(120, 190, 255, ${0.1  * haloAlpha})`);
+      inner.addColorStop(1,   `rgba(80,  160, 255, 0)`);
+      hctx.fillStyle = inner;
+      hctx.beginPath();
+      hctx.arc(x, y, 60, 0, Math.PI * 2);
+      hctx.fill();
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
     const cursor = document.getElementById('custom-cursor');
-
-    let mouseX = 0;
-    let mouseY = 0;
-
-    let cursorX = 0;
-    let cursorY = 0;
+    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
 
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      drawHalo(mouseX, mouseY);
     });
 
     function animateCursor() {
       cursorX += (mouseX - cursorX) * 0.15;
       cursorY += (mouseY - cursorY) * 0.15;
-
-      cursor.style.transform =
-        `translate(${cursorX - 12}px, ${cursorY - 5}px) rotate(-20deg)`;;
-
+      cursor.style.transform = `translate(${cursorX - 12}px, ${cursorY - 5}px) rotate(-20deg)`;
       requestAnimationFrame(animateCursor);
     }
-
     animateCursor();
+
+    // fade out halo when overlay is dismissed
+    const _origReveal = revealSite;
+    overlay.addEventListener('click', () => {
+      const fadeStart = performance.now();
+      const dur = 900;
+      function fadeHalo(now) {
+        haloAlpha = Math.max(0, 1 - (now - fadeStart) / dur);
+        if (haloAlpha > 0) requestAnimationFrame(fadeHalo);
+      }
+      requestAnimationFrame(fadeHalo);
+    }, { once: true });
   </script>
 
 </body>
