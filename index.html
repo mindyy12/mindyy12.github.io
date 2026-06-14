@@ -76,29 +76,28 @@
 
     .intro-name {
       font-family: var(--serif);
-      /* exact match to .hero-heading */
       font-size: clamp(2.4rem, 6vw, 4.2rem);
       line-height: 1.1;
       letter-spacing: -0.02em;
-      color: #b8d4f8;
+      color: #9a9a94; /* light grey */
       max-width: 700px;
+      user-select: none;
+    }
+
+    .intro-word {
+      display: inline-block;
+      color: #9a9a94;
+      text-shadow: none;
+      transition: color 0.5s ease, text-shadow 0.6s ease;
+    }
+
+    .intro-word.lit {
+      color: #b8d4f8;
       text-shadow:
         0 0 40px rgba(150, 200, 255, 0.55),
         0 0 100px rgba(100, 160, 255, 0.3),
         0 0 200px rgba(80, 140, 255, 0.15);
-      user-select: none;
       animation: pulseGlow 3.5s ease-in-out infinite;
-    }
-
-    .intro-hint {
-      margin-top: 2rem;
-      font-family: var(--sans);
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(180, 210, 255, 0.35);
-      user-select: none;
-      animation: hintFade 2s ease-in-out 1.2s both;
     }
 
     /* subtle particle dots */
@@ -114,6 +113,51 @@
       border-radius: 50%;
       background: rgba(120, 180, 255, 0.12);
       animation: floatDot linear infinite;
+    }
+
+    .intro-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .power-btn {
+      flex-shrink: 0;
+      width: clamp(2.4rem, 6vw, 4.2rem);
+      height: clamp(2.4rem, 6vw, 4.2rem);
+      border-radius: 50%;
+      border: 2px solid rgba(180, 210, 255, 0.35);
+      background: transparent;
+      color: rgba(180, 210, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      margin-top: 0.4em; /* nudge to align with first line of text */
+    }
+
+    .power-btn svg {
+      width: 45%;
+      height: 45%;
+    }
+
+    .power-btn:hover {
+      border-color: rgba(180, 210, 255, 0.9);
+      color: #b8d4f8;
+      box-shadow:
+        0 0 30px rgba(120, 180, 255, 0.4),
+        0 0 70px rgba(100, 160, 255, 0.2);
+    }
+
+    .power-btn.activated {
+      border-color: #b8d4f8;
+      color: #b8d4f8;
+      box-shadow:
+        0 0 40px rgba(150, 200, 255, 0.6),
+        0 0 100px rgba(100, 160, 255, 0.3);
     }
 
     @keyframes pulseGlow {
@@ -235,6 +279,12 @@
       left: 0;
       transform: translate(-50%, -50%);
       will-change: transform;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    #custom-cursor.visible {
+      opacity: 1;
     }
 
     body, a, button, .project-link, .gallery-btn, img, video { cursor: none; }
@@ -269,8 +319,19 @@
     <div class="intro-dots" id="intro-dots"></div>
     <div class="intro-content">
       <p class="intro-eyebrow-ghost">Mechatronic Engineering Student in Product &amp; Design</p>
-      <div class="intro-name">Hi, I'm Mindy. <br>Watch me build!</div>
-      <p class="intro-hint">click anywhere to enter</p>
+      <div class="intro-row">
+        <div class="intro-name">
+          <span class="intro-word">Hi,</span> <span class="intro-word">I'm</span> <span class="intro-word">Mindy.</span><br>
+          <span class="intro-word">Watch</span> <span class="intro-word">me</span> <span class="intro-word">build!</span>
+        </div>
+        <button class="power-btn" id="power-btn" aria-label="Enter site">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v6"></path>
+            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
     </div>
   </div>
 
@@ -502,18 +563,41 @@
       dotsContainer.appendChild(dot);
     }
 
-    overlay.addEventListener('click', revealSite, { once: true });
+    const powerBtn = document.getElementById('power-btn');
+
+    powerBtn.addEventListener('click', () => {
+      powerBtn.classList.add('activated');
+      revealSite();
+    }, { once: true });
 
     function revealSite() {
-      overlay.classList.add('revealed');
-      // start the hero a beat after overlay begins fading so the text
-      // is already in place when the dark background lifts
+      const words = document.querySelectorAll('.intro-word');
+      const delayPerWord = 180;
+
+      words.forEach((w, i) => {
+        setTimeout(() => w.classList.add('lit'), i * delayPerWord);
+      });
+
+      const totalDelay = words.length * delayPerWord + 500;
+
       setTimeout(() => {
-        document.querySelector('.hero').classList.add('animate-in');
-      }, 200);
-      overlay.addEventListener('transitionend', () => {
-        overlay.style.display = 'none';
-      }, { once: true });
+        const fadeStart = performance.now();
+        const dur = 900;
+        function fadeHalo(now) {
+          haloAlpha = Math.max(0, 1 - (now - fadeStart) / dur);
+          if (haloAlpha > 0) requestAnimationFrame(fadeHalo);
+        }
+        requestAnimationFrame(fadeHalo);
+
+        overlay.classList.add('revealed');
+        cursor.classList.add('visible'); // ← add this line
+        setTimeout(() => {
+          document.querySelector('.hero').classList.add('animate-in');
+        }, 200);
+        overlay.addEventListener('transitionend', () => {
+          overlay.style.display = 'none';
+        }, { once: true });
+      }, totalDelay);
     }
 
     /* ─── GALLERY ─── */
@@ -580,8 +664,14 @@
       haloAlpha = 1;
       overlay.style.display = '';
       overlay.classList.remove('revealed');
+      document.querySelectorAll('.intro-word').forEach(w => w.classList.remove('lit'));
       document.querySelector('.hero').classList.remove('animate-in');
-      overlay.addEventListener('click', revealSite, { once: true });
+      cursor.classList.remove('visible');
+      powerBtn.classList.remove('activated');
+      powerBtn.addEventListener('click', () => {
+        powerBtn.classList.add('activated');
+        revealSite();
+      }, { once: true });
     }
 
     /* ─── SCROLL ANIMATIONS ─── */
@@ -652,18 +742,6 @@
       requestAnimationFrame(animateCursor);
     }
     animateCursor();
-
-    // fade out halo when overlay is dismissed
-    const _origReveal = revealSite;
-    overlay.addEventListener('click', () => {
-      const fadeStart = performance.now();
-      const dur = 900;
-      function fadeHalo(now) {
-        haloAlpha = Math.max(0, 1 - (now - fadeStart) / dur);
-        if (haloAlpha > 0) requestAnimationFrame(fadeHalo);
-      }
-      requestAnimationFrame(fadeHalo);
-    }, { once: true });
   </script>
 
 </body>
